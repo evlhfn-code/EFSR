@@ -1,0 +1,938 @@
+<title>EFSR Modded Field Guide</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Calculators and a guide for Egg Farm Simulator [MODDED]: Black, Gold and Platinum Eggs, Easter and Phoenix Eggs, level stats, heroes and diamonds.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Source+Sans+3:ital,wght@1,700;1,900&family=Titillium+Web:wght@400;600;700&display=swap">
+<style>
+/* Layout: a dark warm frame (Timberline) around one working panel; a left menu of brass-cornered rows picks the guide note, calculator or table. */
+:root {
+  color-scheme: dark;
+  /* surfaces */
+  --stage: #121a13;
+  --stage-glow: #23331f;
+  --panel: #1a1511;
+  --panel-raised: #241d17;
+  --panel-sunken: #100c09;
+  --header: #2c241c;
+  --line: #4a3d30;
+  --line-strong: #8a7158;
+  --brass: #c9a46a;
+  --brass-light: #ecd3a0;
+  --grain: #ffdcaa0d;
+  /* text */
+  --text: #f4ece0;
+  --text-muted: #b8a892;
+  --text-faint: #7d6f5e;
+  --gold: #f2b544;
+  --currency: #f7d58a;
+  /* action tones */
+  --confirm: #7bc47f; --confirm-fill: #22341f; --confirm-text: #b4ecae;
+  --sell: #e0913a; --sell-fill: #3d2512; --sell-text: #ffc98a;
+  --danger: #c8323a; --danger-fill: #3a1416; --danger-text: #ff9a96;
+  --info: #6fb3e0; --info-fill: #132634; --info-text: #a9dafc;
+  --magic: #b18af0; --magic-fill: #271b3a; --magic-text: #d6c0ff;
+  /* the game's currencies */
+  --egg-white: #f4ece0;
+  --egg-black: #c6b2ff;
+  --egg-gold: #f2b544;
+  --egg-plat: #d5e6ee;
+  --diamond: #6ec3ff;
+  /* item rarity */
+  --r-common: #c2b19c; --r-uncommon: #8fdc7a; --r-rare: #6ec3ff;
+  --r-epic: #b18af0; --r-legendary: #ffcf4a; --r-mythic: #ff8ad8;
+  /* type */
+  --f-title: "Source Sans 3", "Source Sans Pro", system-ui, sans-serif;
+  --f-serif: Merriweather, Georgia, serif;
+  --f-label: "Titillium Web", "Segoe UI", system-ui, sans-serif;
+  --f-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  /* shape */
+  --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-6: 24px;
+  --radius-xs: 2px;
+  --shadow-panel: 0 18px 48px #000000a6;
+  --shadow-focus: 0 0 0 2px #f4ece0;
+}
+html { background: var(--stage); }
+body {
+  background:
+    radial-gradient(1200px 520px at 50% -120px, var(--stage-glow), transparent 70%),
+    var(--stage);
+  color: var(--text);
+  font-family: var(--f-label);
+  font-size: 15px;
+  line-height: 1.45;
+  min-height: 100vh;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+* { box-sizing: border-box; }
+a { color: var(--info-text); text-underline-offset: 2px; }
+a:hover { color: var(--text); }
+:focus-visible { outline: none; box-shadow: var(--shadow-focus); }
+.wrap {
+  max-width: 1320px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.num, td.n, .tile .v, .row .v { font-variant-numeric: tabular-nums; }
+
+/* ---------- top bar ---------- */
+.topbar { padding-block: 18px 10px; }
+.topbar .wrap { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; }
+.brand { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.crest {
+  width: 46px; height: 54px; flex: none; position: relative;
+  background: radial-gradient(60% 50% at 40% 35%, #fff8e6, #ecd3a0 55%, #a27b42 100%);
+  border-radius: 50% 50% 46% 46% / 58% 58% 42% 42%;
+  box-shadow: inset 0 -4px 0 #00000055, 0 3px 0 #000;
+}
+.crest::after { content: ""; position: absolute; inset: 9px 11px; border-radius: inherit; border: 2px solid #6b4a2e66; }
+.gild {
+  font-family: var(--f-title); font-style: italic; font-weight: 900;
+  background: linear-gradient(180deg, #fff6dc 0%, #ecd3a0 46%, #c9a46a 62%, #f2d38f 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  filter: drop-shadow(0 2px 0 #000);
+}
+.brand h1 { margin: 0; font-size: clamp(26px, 4vw, 38px); line-height: 1; letter-spacing: 0.005em; text-wrap: balance; }
+.brand p { margin: 4px 0 0; color: var(--text-muted); font-size: 14px; }
+.boosts { display: flex; flex-wrap: wrap; gap: 8px; }
+.boost {
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 6px 12px 7px; min-width: 104px;
+  background: var(--panel-raised); border: 1px solid var(--line);
+  box-shadow: inset 0 1px 0 #ffe6c014, inset 0 -3px 0 #00000059;
+}
+.boost b { font-family: var(--f-title); font-style: italic; font-weight: 900; font-size: 22px; line-height: 1.05; }
+@media (max-width: 560px) { .boosts { display: grid; grid-template-columns: 1fr 1fr; width: 100%; } .boost { min-width: 0; } }
+.boost span { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+
+/* ---------- tabs ---------- */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: #121a13ee; backdrop-filter: blur(6px); border-bottom: 1px solid var(--line); }
+.tabs .wrap { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; }
+.tabs .wrap::-webkit-scrollbar { display: none; }
+.tab {
+  font-family: var(--f-serif); font-weight: 700; font-size: 15px;
+  color: var(--text-muted); background: none; border: 0; cursor: pointer;
+  padding: 12px 14px 10px; border-bottom: 3px solid transparent; white-space: nowrap;
+}
+.tab:hover { color: var(--text); }
+.tab[aria-selected="true"] { color: var(--text); border-bottom-color: var(--brass); }
+
+/* ---------- shell ---------- */
+.shell { display: grid; grid-template-columns: 268px minmax(0, 1fr); gap: 20px; padding-block: 20px 32px; align-items: start; }
+@media (max-width: 860px) { .shell { grid-template-columns: minmax(0, 1fr); gap: 14px; } }
+
+/* panel: square frame, double line, brass corner brackets, growth-ring grain */
+.panel {
+  position: relative;
+  background:
+    repeating-radial-gradient(circle at 18% -30%, var(--grain) 0 1px, transparent 1px 9px),
+    radial-gradient(140% 90% at 50% 0%, #2a211999, transparent 60%),
+    var(--panel);
+  border: 2px solid #000;
+  box-shadow: inset 0 0 0 1px var(--line), var(--shadow-panel);
+}
+.panel::after {
+  content: ""; position: absolute; inset: -6px; pointer-events: none;
+  --b: var(--brass);
+  background:
+    linear-gradient(var(--b), var(--b)) left top / 12px 3px no-repeat,
+    linear-gradient(var(--b), var(--b)) left top / 3px 12px no-repeat,
+    linear-gradient(var(--b), var(--b)) right top / 12px 3px no-repeat,
+    linear-gradient(var(--b), var(--b)) right top / 3px 12px no-repeat,
+    linear-gradient(var(--b), var(--b)) left bottom / 12px 3px no-repeat,
+    linear-gradient(var(--b), var(--b)) left bottom / 3px 12px no-repeat,
+    linear-gradient(var(--b), var(--b)) right bottom / 12px 3px no-repeat,
+    linear-gradient(var(--b), var(--b)) right bottom / 3px 12px no-repeat;
+}
+.plank {
+  position: relative; display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  min-height: 64px; padding: 10px 24px 10px 40px;
+  background:
+    repeating-linear-gradient(180deg, #ffdcaa08 0 1px, transparent 1px 5px),
+    linear-gradient(180deg, #382d23, var(--header));
+  border-bottom: 2px solid var(--brass);
+}
+.plank::before {
+  content: ""; position: absolute; left: 16px; top: 50%; width: 10px; height: 10px; margin-top: -5px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, var(--brass-light), var(--brass) 60%, #7a5a2c);
+  box-shadow: 0 1px 0 #000;
+}
+.plank h2 { margin: 0; font-size: clamp(24px, 3.2vw, 34px); line-height: 1.1; text-wrap: balance; }
+.plank .sub { color: var(--text-muted); font-size: 14px; flex-basis: 100%; margin-top: -4px; }
+.body { padding: 20px 24px 26px; }
+@media (max-width: 560px) { .body { padding: 16px 14px 20px; } .plank { padding-right: 14px; } }
+
+/* ---------- menu ---------- */
+.menu { padding: 10px; }
+.menu h3 { margin: 10px 8px 6px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+.menu h3:first-child { margin-top: 2px; }
+.mi {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  padding: 9px 10px; background: none; border: 1px solid transparent; color: var(--text);
+  font-family: var(--f-label); font-weight: 600; font-size: 15px; text-align: left; cursor: pointer;
+}
+.mi:hover { background: var(--panel-raised); border-color: var(--line); }
+.mi[aria-current="page"] { background: var(--panel-raised); border-color: var(--brass); box-shadow: inset 3px 0 0 var(--brass); }
+.mi .k { margin-left: auto; font-size: 11px; color: var(--text-faint); font-weight: 700; letter-spacing: 0.06em; }
+@media (max-width: 860px) {
+  .menu { padding: 8px; }
+  .menu .list { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 4px; }
+  .menu h3 { display: none; }
+  .mi { width: auto; flex: none; white-space: nowrap; border-color: var(--line); }
+  .mi .k { display: none; }
+}
+
+/* ---------- guide prose ---------- */
+.prose { max-width: 76ch; font-size: 16px; line-height: 1.6; }
+.prose h1 { display: none; }
+.prose h2 { font-family: var(--f-title); font-style: italic; font-weight: 700; font-size: 23px; line-height: 1.2; margin: 28px 0 8px; color: var(--text); text-wrap: balance; }
+.prose h3 { font-family: var(--f-title); font-style: italic; font-weight: 700; font-size: 19px; margin: 20px 0 6px; }
+.prose p, .prose ul, .prose ol { margin: 0 0 12px; }
+.prose li { margin: 3px 0; }
+.prose strong { color: var(--currency); font-weight: 700; }
+.prose code { font-family: var(--f-mono); font-size: 0.88em; background: var(--panel-sunken); border: 1px solid var(--line); padding: 1px 5px; border-radius: var(--radius-xs); color: var(--brass-light); overflow-wrap: anywhere; }
+.prose > :first-child { margin-top: 0; }
+.tablewrap { overflow-x: auto; margin: 6px 0 16px; border: 1px solid var(--line); background: var(--panel-sunken); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th { text-align: left; font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; background: var(--panel-raised); padding: 8px 10px; border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td.n { text-align: right; white-space: nowrap; color: var(--gold); }
+.prose td strong { color: var(--gold); }
+
+/* ---------- calculators ---------- */
+.intro { color: var(--text-muted); margin: 0 0 18px; max-width: 80ch; }
+.calc { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 22px; align-items: start; }
+@media (max-width: 1040px) { .calc { grid-template-columns: minmax(0, 1fr); } }
+.form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 12px; padding: 14px; background: var(--panel-raised); border: 1px solid var(--line); }
+.form .full { grid-column: 1 / -1; }
+.form .group { grid-column: 1 / -1; margin: 6px 0 -4px; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass-light); font-weight: 700; border-bottom: 1px solid var(--line); padding-bottom: 4px; }
+.form .group:first-child { margin-top: 0; }
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field label { font-size: 13px; color: var(--text-muted); font-weight: 600; }
+.field .hint { font-size: 12px; color: var(--text-faint); line-height: 1.35; }
+input[type="text"], select {
+  width: 100%; font: 600 15px/1.2 var(--f-label); color: var(--text);
+  background: var(--panel-sunken); border: 1px solid var(--line); border-radius: var(--radius-xs);
+  padding: 8px 10px; font-variant-numeric: tabular-nums;
+}
+input[type="text"]:focus, select:focus { border-color: var(--brass); }
+input.bad { border-color: var(--danger); }
+.check { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); cursor: pointer; padding-top: 18px; }
+.check input { width: 18px; height: 18px; accent-color: var(--brass); }
+.results { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 10px; }
+.tile { padding: 10px 12px 12px; background: var(--panel-sunken); border: 1px solid var(--line); min-width: 0; }
+.tile .l { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); font-weight: 700; }
+.tile .v { font-family: var(--f-title); font-style: italic; font-weight: 900; font-size: 26px; line-height: 1.15; margin-top: 2px; overflow-wrap: anywhere; color: var(--gold); }
+.tile .s { font-size: 12px; color: var(--text-faint); margin-top: 2px; overflow-wrap: anywhere; }
+.tile.hero { border-color: var(--brass); background: linear-gradient(180deg, #2a2118, var(--panel-sunken)); }
+.c-white { color: var(--egg-white) !important; } .c-black { color: var(--egg-black) !important; }
+.c-gold { color: var(--egg-gold) !important; } .c-plat { color: var(--egg-plat) !important; }
+.c-dia { color: var(--diamond) !important; } .c-good { color: var(--confirm-text) !important; } .c-bad { color: var(--danger-text) !important; }
+.rows { border: 1px solid var(--line); background: var(--panel-sunken); }
+.row { display: flex; gap: 12px; align-items: baseline; justify-content: space-between; padding: 7px 12px; border-bottom: 1px solid var(--line); font-size: 15px; }
+.row:last-child { border-bottom: 0; }
+.row .k { color: var(--text-muted); }
+.row .v { color: var(--gold); font-weight: 700; text-align: right; overflow-wrap: anywhere; }
+.note { font-size: 13px; color: var(--text-muted); border-left: 2px solid var(--line-strong); padding: 2px 0 2px 10px; }
+.note b { color: var(--text); }
+.sec { font-family: var(--f-title); font-style: italic; font-weight: 700; font-size: 20px; margin: 4px 0 0; }
+
+/* ---------- buttons, tags ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px; cursor: pointer;
+  font: 700 14px/1 var(--f-serif); color: var(--text);
+  padding: 9px 14px 11px; background: var(--panel-raised); border: 2px solid var(--line-strong);
+  box-shadow: inset 0 1px 0 #ffe6c01f, inset 0 -3px 0 #00000073;
+  transition: transform .08s ease-out, filter .12s;
+}
+.btn:hover { filter: brightness(1.12); transform: scale(1.03); }
+.btn:active { transform: scale(0.96); }
+.btn.info { background: var(--info-fill); border-color: var(--info); color: var(--info-text); }
+.btn.confirm { background: var(--confirm-fill); border-color: var(--confirm); color: var(--confirm-text); }
+.btn.sell { background: var(--sell-fill); border-color: var(--sell); color: var(--sell-text); }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag { display: inline-block; font: 700 11px/1 var(--f-label); letter-spacing: 0.08em; text-transform: uppercase; padding: 4px 6px; border: 1px solid currentColor; border-radius: var(--radius-xs); white-space: nowrap; vertical-align: 1px; }
+.tag.discord { color: var(--info-text); } .tag.wiki { color: var(--text-muted); } .tag.mixed { color: var(--magic-text); }
+.r-Common { color: var(--r-common); } .r-Uncommon { color: var(--r-uncommon); } .r-Rare { color: var(--r-rare); }
+.r-Epic { color: var(--r-epic); } .r-Legendary { color: var(--r-legendary); } .r-Mythic { color: var(--r-mythic); }
+.search { max-width: 340px; margin-bottom: 12px; }
+
+/* ---------- updates ---------- */
+.log { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.logcard { background: var(--panel-raised); border: 1px solid var(--line); padding: 12px 14px 14px; min-width: 0; }
+.logcard h3 { margin: 0 0 8px; font-family: var(--f-title); font-style: italic; font-weight: 900; font-size: 20px; color: var(--currency); }
+.logcard ul { margin: 0; padding-left: 18px; font-size: 14px; color: var(--text); }
+.logcard li { margin: 3px 0; }
+
+footer { color: var(--text-faint); font-size: 13px; padding-block: 8px 28px; }
+footer a { color: var(--text-muted); }
+@media (prefers-reduced-motion: reduce) { .btn, .btn:hover, .btn:active { transition: none; transform: none; } }
+</style>
+
+<header class="topbar">
+  <div class="wrap">
+    <div class="brand">
+      <div class="crest" aria-hidden="true"></div>
+      <div>
+        <h1 class="gild">EFSR Modded Field Guide</h1>
+        <p>Calculators and a guide for Egg Farm Simulator [MODDED]</p>
+      </div>
+    </div>
+    <div class="boosts" aria-label="Permanent modded boosts">
+      <div class="boost"><b class="c-white">250,000x</b><span>White Eggs</span></div>
+      <div class="boost"><b class="c-dia">10x</b><span>Diamonds</span></div>
+      <div class="boost"><b class="c-black">500x</b><span>Black Eggs</span></div>
+      <div class="boost"><b class="c-gold">25x</b><span>Gold Eggs</span></div>
+    </div>
+  </div>
+</header>
+<nav class="tabs" aria-label="Sections">
+  <div class="wrap" role="tablist" id="tabs"></div>
+</nav>
+<main class="wrap shell">
+  <aside class="panel menu" id="menu" aria-label="Pages"></aside>
+  <section class="panel" id="view" aria-live="polite"></section>
+</main>
+<footer class="wrap">
+  <p>Modded values come from the EFSR [REBORN] Discord update and patch logs. Base-game rules and formulas come from the <a href="https://egg-farm-simulator-rblx.fandom.com/wiki/Egg_Farm_Simulator_RBLX_Wiki" target="_blank" rel="noopener">Egg Farm Simulator RBLX Wiki</a> (CC BY-SA). A fan project, not made by or affiliated with the game's developers. Source: <a href="https://github.com/evlhfn-code/EFSR" target="_blank" rel="noopener">github.com/evlhfn-code/EFSR</a>.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script>
+const DATA = /*__DATA__*/null;
+const CHICKENS = /*__CHICKENS__*/null;
+const NOTES = /*__NOTES__*/null;
+
+/* ============ big numbers (log10 space) ============ */
+const LN10 = Math.LN10, LOG2 = Math.log10(2);
+const NEG = -Infinity;
+function lsum(a, b) { if (a === NEG) return b; if (b === NEG) return a; const m = Math.max(a, b); return m + Math.log10(1 + Math.pow(10, Math.min(a, b) - m)); }
+function ldiff(a, b) { if (b === NEG) return a; if (b >= a) return NEG; return a + Math.log10(1 - Math.pow(10, b - a)); }
+const SUF = ['', 'K', 'M', 'B', 'T', 'q', 'Q', 's', 'S', 'O', 'N', 'd', 'U', 'D'];
+const SUFMAP = {}; SUF.forEach((s, i) => { if (s) SUFMAP[s] = 3 * i; });
+Object.assign(SUFMAP, { k: 3, m: 6, b: 9, t: 12 });
+function fmtInt(x) { return Math.round(x).toLocaleString('en-US'); }
+function fmtL(l, digits) {
+  if (l === NEG || Number.isNaN(l)) return '0';
+  if (l === Infinity) return 'too big';
+  if (l < -2) return '≈0';
+  if (l < 3) { const x = Math.pow(10, l); return x >= 100 ? fmtInt(x) : (+x.toFixed(2)).toLocaleString('en-US'); }
+  const i = Math.floor(l / 3);
+  if (i < SUF.length) {
+    let m = Math.pow(10, l - 3 * i);
+    let s = m >= 100 ? m.toFixed(1) : m >= 10 ? m.toFixed(2) : m.toFixed(3);
+    if (parseFloat(s) >= 1000 && i + 1 < SUF.length) return (m / 1000).toFixed(3) + SUF[i + 1];
+    return s + SUF[i];
+  }
+  let e = Math.floor(l), m = Math.pow(10, l - e);
+  if (m >= 9.995) { m = 1; e += 1; }
+  return m.toFixed(2) + 'e' + e.toLocaleString('en-US');
+}
+function sciL(l) { if (l === NEG) return '0'; const e = Math.floor(l), m = Math.pow(10, l - e); return m.toFixed(3) + 'e' + e; }
+function fmtN(x, d = 2) { if (!isFinite(x)) return x > 0 ? '∞' : '-'; if (Math.abs(x) >= 1e15) return fmtL(Math.log10(Math.abs(x))); return (+x.toFixed(d)).toLocaleString('en-US'); }
+/* parse "1,234", "2.5Q", "1e300", "3.2e1,500" -> log10, or NaN */
+function parseL(str) {
+  if (str == null) return NaN;
+  let s = String(str).trim().replace(/[,_\s]/g, '');
+  if (s === '') return NaN;
+  const m = s.match(/^([0-9]*\.?[0-9]+)(?:[eE]\+?(-?[0-9]+))?([A-Za-z]{0,2})$/);
+  if (!m) return NaN;
+  const mant = parseFloat(m[1]); if (mant === 0) return NEG;
+  let l = Math.log10(mant) + (m[2] ? parseInt(m[2], 10) : 0);
+  if (m[3]) { if (!(m[3] in SUFMAP)) return NaN; l += SUFMAP[m[3]]; }
+  return l;
+}
+const pow10 = l => Math.pow(10, l);
+const tri = n => n * (n + 1) / 2;
+const triInv = c => Math.max(0, Math.floor((Math.sqrt(8 * c + 1) - 1) / 2 + 1e-9));
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+
+/* ============ state ============ */
+const DEFAULTS = {
+  level: '300,000', startLevel: '1', earth: '32', rebirthed: true, rp: '25', radio: '2,880', mag: '0',
+  abundance: '0', prosperity: '0', prestige: '0', event: '1', heroLevels: '50,000',
+  lifeBE: '1e2000', runBE: '1e5800', geClaimed: '50,000',
+  plat: '200,000', pl_rci: '0', pl_rb: '0', pl_ls: '0', pl_ab: '0', pl_pr: '0', pl_rs: '0', rciMax: '550',
+  w_rci: '0.508', w_growth: '0.411', w_res: '0.081', w_pr: '0.01', w_rb: '0.05', w_ls: '0.041',
+  egg: 'Idol', eggFrom: '0', eggTo: '1,500', water: '50', beAvail: '1e600', hatched: '5',
+  ge: '20,000', pxEgg: 'Sound', pxFrom: '0', pxTo: '20', pxE: '0', pxW: '0',
+  lvl: '25,000', idol: '1,500', sound: '10', resonance: '0', cobra: '18,715', acid: '0', hourglass: '1,101', wind: '0', sci: '18,715', elec: '0', hasty: false,
+  heroFrom: '175', heroTo: '1,000', heroGarbage: '0',
+  diaHave: '20,000', diaWant: '100,000', vip: true, autoOwned: '2', autoBuy: '3', box: 'Mythic Box', boxN: '10', weapon: 'Mythic', ability: 'Decoy', durLvl: '0',
+  num: '2.5e1,000'
+};
+let S = Object.assign({}, DEFAULTS);
+try { const saved = JSON.parse(localStorage.getItem('efsr-calc-v1') || 'null'); if (saved && typeof saved === 'object') S = Object.assign(S, saved); } catch (e) {}
+function save() { try { localStorage.setItem('efsr-calc-v1', JSON.stringify(S)); } catch (e) {} }
+const num = k => { const l = parseL(S[k]); return l === NEG ? 0 : (Number.isNaN(l) ? 0 : pow10(l)); };
+const big = k => { const l = parseL(S[k]); return Number.isNaN(l) ? NEG : l; };
+const M = DATA.modded;
+
+/* ============ shared game formulas ============ */
+function k500(L) { return Math.floor(L / 500); }
+function guaranteedMutation(L) { return L === 100 || L === 110 || L === 130 || L === 200 || (L >= 300 && L <= 800 && L % 100 === 0); }
+function radioBonus(radio, mag) { return 75 * (1 - Math.exp(-0.013 * radio)) * (1 + 0.25 * mag); }
+function mutChance(L, radio, mag) { if (L < 100) return 0; if (guaranteedMutation(L)) return 100; return Math.min(100, Math.max(5, 25 - 2 * k500(L) + radioBonus(radio, mag))); }
+function idolRed(idol, sound, res) { return 8 * (1 - Math.exp(-0.025 * idol)) * (1 + 0.125 * sound * (1 + 0.02 * res)); }
+function chickensPer(L, idol, sound, res, hasty) { if (hasty) return 1; return Math.max(2, 10 + 0.1 * k500(L) - idolRed(idol, sound, res)); }
+function cobraRed(c, acid) { return 5 * (1 - Math.exp(-0.002 * c)) * (1 + 0.5 * acid); }
+function bossMult(L, c, acid) { return Math.max(5, 10 + 0.4 * k500(L) - cobraRed(c, acid)); }
+function hgBonus(hg, wind) { return 30 * (1 - Math.exp(-0.034 * hg)) * (1 + 0.75 * wind); }
+function bossTimer(L, hg, wind) { return Math.max(2, 30 - 2 * k500(L) + hgBonus(hg, wind)); }
+function sciMult(sci, elec) { return 1 + 99 * (1 - Math.exp(-0.002 * sci)) * (1 + elec); }
+function eggception(L, sci, elec) { return Math.min(100, Math.pow(0.994, k500(L)) * sciMult(sci, elec)); }
+function chickenHPL(L) {
+  if (L <= 140) return 1 + lsum(L > 1 ? Math.log10(L - 1) : NEG, (L - 1) * Math.log10(1.55));
+  if (L <= 500) return 1 + lsum(Math.log10(139), Math.log10(2.8582883926875915e26) + (L - 140) * Math.log10(1.145));
+  if (L <= 200000) {
+    let l = Math.log10(4.227476956606746e48); const N = Math.floor((L - 1) / 500);
+    for (let j = 1; j <= N; j++) l += Math.min(500, L - 500 * j) * Math.log10(1.145 + 0.001 * j);
+    return l;
+  }
+  return Math.log10(1.24) + 25409 + (L - 200001) * Math.log10(1.545);
+}
+function chickenName(L) {
+  const cyc = ((L - 1) % 855) + 1; let name = CHICKENS[0][1];
+  for (const c of CHICKENS) { if (c[0] <= cyc) name = c[1]; else break; }
+  return name + ' Chicken';
+}
+function rpFromGE(ge) { return 25 - 23 * Math.exp(-0.0003 * ge); }
+function geForRP(rp) { return Math.log(23 / (25 - rp)) / 0.0003; }
+function beMods() {
+  return Math.log10(M.blackEggs) + Math.log10(1 + 0.01 * num('abundance')) + Math.log10(1 + 0.02 * num('prosperity') * num('prestige')) + Math.log10(Math.max(1e-9, num('event')));
+}
+function bossBEL(L, E, rp, reb, mods) {
+  if (L < 100) return NEG;
+  const lp = 1.3 * Math.log10((L - 80) / 25);
+  const inner = reb ? lsum(Math.log10(20) + (L / 5 - 20) * Math.log10(1 + rp), lp) : lp;
+  return Math.log10(10 * E * E + 1) + inner + mods;
+}
+
+/* ============ Easter / Phoenix / Platinum costs ============ */
+const EGG = Object.fromEntries(DATA.easterEggs.map(e => [e.name, e]));
+function costL(type, aL, bL) {
+  // a, b given as log10 levels; returns log10 cost (before Water)
+  if (bL <= aL) return NEG;
+  const a = aL === NEG ? 0 : pow10(aL), b = pow10(bL);
+  if (type === 'constant') return bL < 15 ? Math.log10(b - a) : ldiff(bL, aL);
+  if (type === 'linear') return bL < 7 ? Math.log10(tri(b) - tri(a)) : ldiff(2 * bL, aL === NEG ? NEG : 2 * aL) - LOG2;
+  if (type === 'turtle') {
+    if (b < 2000) { let s = 0; for (let n = Math.floor(a); n < b; n++) s += Math.pow(Math.max(n, 1), 1.5); return Math.log10(s); }
+    return ldiff(2.5 * bL, aL === NEG ? NEG : 2.5 * aL) - Math.log10(2.5);
+  }
+  if (type === 'exp') return ldiff((b + 1) * LOG2, (a + 1) * LOG2);
+  return NEG;
+}
+function maxLevelL(type, aL, budgetL) {
+  // highest level reachable from a with budget (log10, after Water) -> log10 level
+  const a = aL === NEG ? 0 : pow10(aL);
+  if (budgetL === NEG) return aL;
+  if (type === 'constant') return lsum(aL, budgetL);
+  if (type === 'linear') {
+    if (budgetL < 13 && a < 1e7) return Math.log10(triInv(pow10(budgetL) + tri(a)));
+    return lsum(LOG2 + budgetL, aL === NEG ? NEG : 2 * aL) / 2;
+  }
+  if (type === 'turtle') return lsum(Math.log10(2.5) + budgetL, aL === NEG ? NEG : 2.5 * aL) / 2.5;
+  if (type === 'exp') { const b = Math.floor(lsum(budgetL, (a + 1) * LOG2) / LOG2 - 1 + 1e-9); return Math.log10(Math.max(b, a)); }
+  return aL;
+}
+function lvlStr(l) { return l === NEG ? '0' : (l < 15 ? fmtInt(pow10(l)) : fmtL(l)); }
+function eggEffect(f, lvlL) {
+  const n = lvlL === NEG ? 0 : pow10(lvlL);
+  const lin = (pct, unit) => lvlL === NEG ? '0' + unit : '+' + fmtL(Math.log10(pct) + lvlL) + unit;
+  const sat = (v, unit, d = 2) => v.toFixed(d) + unit;
+  switch (f) {
+    case 'gk': return lin(11, '% DPS');
+    case 'afk': return lin(25, '% DPS while idle');
+    case 'dem': return lin(15, '% crit damage');
+    case 'dragon': return lin(20, '% attack damage');
+    case 'eggplant': return lin(30, '% Fertilizer eggs');
+    case 'faberge': return lin(5, '% White Eggs');
+    case 'newton': return lin(50, '% Eggception eggs');
+    case 'wonder': return lin(10, '% trophy bonus');
+    case 'turtle': return lin(0.01, '% DPS per combo attack');
+    case 'dur': return lin(2, ' s duration');
+    case 'garbage': return '-' + sat(99.99999999 * (1 - Math.exp(-0.01 * n)), '% hero costs', 6);
+    case 'hourglass': return '+' + sat(30 * (1 - Math.exp(-0.034 * n)), ' s boss timer');
+    case 'idol': return '-' + sat(8 * (1 - Math.exp(-0.025 * n)), ' chickens per level', 3);
+    case 'cobra': return '-' + sat(5 * (1 - Math.exp(-0.002 * n)), 'x boss health', 3);
+    case 'present': return sat(100 * (1 - Math.exp(-0.0025 * n)), '% chance of 10x eggs');
+    case 'radio': return '+' + sat(75 * (1 - Math.exp(-0.013 * n)), '% Mutated chance');
+    case 'sci': return '+' + fmtN(9900 * (1 - Math.exp(-0.002 * n)), 1) + '% Eggception chance';
+  }
+  return '';
+}
+function platCost(type, from, n) { if (n <= 0) return 0; return type === 'double' ? Math.pow(2, from + n) - Math.pow(2, from) : n * (2 * from + n + 1) / 2; }
+
+/* ============ calculators ============ */
+const R = {
+  tiles: items => '<div class="tiles">' + items.map(t => `<div class="tile${t.hero ? ' hero' : ''}"><div class="l">${t.l}</div><div class="v ${t.c || ''}" title="${esc(t.title || '')}">${t.v}</div>${t.s ? `<div class="s">${t.s}</div>` : ''}</div>`).join('') + '</div>',
+  rows: items => '<div class="rows">' + items.map(r => `<div class="row"><span class="k">${r[0]}</span><span class="v ${r[2] || ''}">${r[1]}</span></div>`).join('') + '</div>',
+  table: (head, rows, numCols = []) => '<div class="tablewrap"><table><thead><tr>' + head.map(h => `<th>${h}</th>`).join('') + '</tr></thead><tbody>' + rows.map(r => '<tr>' + r.map((c, i) => `<td${numCols.includes(i) ? ' class="n"' : ''}>${c}</td>`).join('') + '</tr>').join('') + '</tbody></table></div>',
+  note: t => `<p class="note">${t}</p>`,
+  sec: t => `<h3 class="sec">${t}</h3>`
+};
+const F = (k, label, o = {}) => Object.assign({ k, label, type: 'text' }, o);
+const G = label => ({ group: label });
+
+const CALCS = [
+  {
+    id: 'calc-run', title: 'Black Eggs per Run', menu: 'Black Eggs per Run',
+    intro: 'What a Retire at a given farm level is worth. Every boss level from 100 counts once, weighted by its Mutated chance. Includes the 500x Black Egg boost and your Platinum bonuses. The starting values are examples; enter yours.',
+    fields: [G('Run'), F('level', 'Retire at farm level'), F('startLevel', 'Run starts at level', { hint: 'Bosses below this are already done.' }),
+      F('heroLevels', 'Hero levels bought this run', { hint: '1 Black Egg per 2,000 levels, before boosts.' }), F('event', 'Event Black Egg boost', { hint: '1 = none' }),
+      G('Rebirth'), F('rebirthed', 'I have Rebirthed at least once', { type: 'bool', full: true }), F('rp', 'Rebirth Power %', { hint: 'From the Phoenix. Cap 30% (31.2% upgraded).' }), F('earth', 'Earth Egg level'),
+      G('Mutated chance'), F('radio', 'Radioactive Egg level'), F('mag', 'Magnetism Egg level'),
+      G('Platinum'), F('abundance', 'Abundance level'), F('prosperity', 'Prosperity level'), F('prestige', 'Prestiges', { hint: 'Assumed: your Rebirth or Ascension count.' })],
+    compute() {
+      const L = Math.floor(num('level')), start = Math.max(1, Math.floor(num('startLevel')));
+      const E = num('earth'), rp = num('rp') / 100, reb = !!S.rebirthed, radio = num('radio'), mag = num('mag');
+      const mods = beMods();
+      const capped = L > 10000000; const top = Math.min(L, 10000000);
+      let exp = NEG, max = NEG, bosses = 0;
+      const marks = [300, 1000, 5000, 10000, 25000, 50000, 100000, 300000, 1000000, 5000000].filter(x => x <= top && x >= start);
+      if (!marks.includes(top)) marks.push(top);
+      const at = {}; let mi = 0;
+      let first = Math.max(100, Math.ceil(start / 5) * 5);
+      for (let lv = first; lv <= top; lv += 5) {
+        const b = bossBEL(lv, E, rp, reb, mods);
+        const ch = mutChance(lv, radio, mag) / 100;
+        exp = lsum(exp, b + Math.log10(ch)); max = lsum(max, b); bosses++;
+        while (mi < marks.length && marks[mi] < lv + 5) { at[marks[mi]] = { per: b, exp, ch }; mi++; }
+      }
+      const heroL = Math.floor(num('heroLevels') / 2000) > 0 ? Math.log10(Math.floor(num('heroLevels') / 2000)) + mods : NEG;
+      const per = bossBEL(Math.floor(top / 5) * 5, E, rp, reb, mods);
+      const total = lsum(exp, heroL);
+      this._last = total;
+      const lifeL = big('lifeBE');
+      const geNew = 5 * (lsum(lifeL, total) - (lifeL === NEG ? 0 : lifeL)) * M.goldEggs * (1 + 0.01 * num('abundance'));
+      const rows = marks.filter(m => at[m]).map(m => [fmtInt(m), `<span class="c-black">${fmtL(at[m].per)}</span>`, at[m].ch * 100 >= 99.95 ? '100%' : (at[m].ch * 100).toFixed(1) + '%', `<span class="c-black">${fmtL(at[m].exp)}</span>`]);
+      return R.tiles([
+        { l: 'Pending if you Retire', v: fmtL(total), c: 'c-black', s: sciL(total) + ' Black Eggs', hero: true, title: sciL(total) },
+        { l: `Per Mutated boss at ${fmtInt(Math.floor(top / 5) * 5)}`, v: fmtL(per), c: 'c-black' },
+        { l: 'If every boss mutates', v: fmtL(max), c: 'c-black', s: fmtInt(bosses) + ' boss levels' },
+        { l: 'From hero levels', v: fmtL(heroL), c: 'c-black' },
+        { l: 'Mutated chance at the end', v: mutChance(Math.floor(top / 5) * 5, radio, mag).toFixed(1) + '%', c: mutChance(Math.floor(top / 5) * 5, radio, mag) >= 100 ? 'c-good' : '' },
+        { l: 'Gold Eggs this adds', v: fmtN(geNew, 1), c: 'c-gold', s: 'vs lifetime Black Eggs in the Gold calculator' }
+      ]) + R.sec('Along the way') + R.table(['Farm level', 'Per boss', 'Mutated chance', 'Run total so far'], rows, [1, 2, 3])
+        + (capped ? R.note('Runs past 10,000,000 levels are summed up to 10,000,000.') : '')
+        + `<div class="btns"><button class="btn info" type="button" data-act="send-run">Use this in the Gold calculator</button></div>`
+        + R.note('Formula: (10 x Earth² + 1) x (20 x (1 + RP)^(level/5 - 20) + ((level - 80)/25)^1.3) per Mutated boss after your first Rebirth; before it, only the second term. Then x500, x(1 + 1% Abundance), x(1 + 2% x Prosperity x Prestiges). Levels 100, 110, 130, 200 and 300 to 800 in hundreds are always Mutated.');
+    }
+  },
+  {
+    id: 'calc-gold', title: 'Gold Eggs and Rebirth Power', menu: 'Gold Eggs & Rebirth Power',
+    intro: 'Lifetime Black Eggs set your Gold Eggs: 5 for every 10x more, times the modded 25x and Abundance. Rebirth Power then comes from lifetime Gold Eggs claimed.',
+    fields: [G('Black Eggs'), F('lifeBE', 'Lifetime Black Eggs claimed so far', { full: true, hint: 'The Phoenix shows this. Accepts 1e2,000, 3.5Q and so on.' }), F('runBE', 'Black Eggs from this Retire', { full: true }),
+      G('Gold Eggs'), F('geClaimed', 'Lifetime Gold Eggs claimed', { hint: 'For the Rebirth Power formula.' }), F('abundance', 'Abundance level')],
+    compute() {
+      const life = big('lifeBE'), run = big('runBE');
+      const after = lsum(life, run);
+      const mult = M.goldEggs * (1 + 0.01 * num('abundance'));
+      const baseBefore = life === NEG ? 0 : 5 * life, baseAfter = after === NEG ? 0 : 5 * after;
+      const gain = (baseAfter - baseBefore) * mult;
+      const nextL = after === NEG ? 0 : after + Math.log10(Math.pow(10, 0.2) - 1);
+      const ge = num('geClaimed'); const rp = rpFromGE(ge);
+      const targets = [5, 10, 15, 20, 22.5, 24, 24.5, 24.9, 24.99];
+      return R.tiles([
+        { l: 'Gold Eggs from this Retire', v: fmtN(gain, 1), c: 'c-gold', hero: true, s: `${fmtN(baseAfter - baseBefore, 2)} base x ${fmtN(mult, 2)}` },
+        { l: 'Lifetime base Gold Eggs', v: fmtN(baseAfter, 1), c: 'c-gold', s: 'before the 25x and Abundance' },
+        { l: 'Black Eggs for +1 base Gold Egg', v: fmtL(nextL), c: 'c-black', s: 'about 1.585x your lifetime total' },
+        { l: 'Rebirth Power (base formula)', v: rp.toFixed(3) + '%', c: rp >= 24.99 ? 'c-good' : '', s: 'Modded cap 30%, 31.2% with all upgrades' }
+      ]) + R.sec('Gold Eggs needed for Rebirth Power') + R.table(['Rebirth Power', 'Lifetime Gold Eggs', 'Base Gold Eggs at 25x'],
+        targets.map(t => [t + '%', `<span class="c-gold">${fmtInt(geForRP(t))}</span>`, fmtInt(geForRP(t) / mult)]), [1, 2])
+        + R.note('Original formula: RP = 25 - 23 x e^(-0.0003 x Gold Eggs), which tops out at 25%. Modded raises the cap to 30% and says growth plateaus after 25%. The exact curve above 25% is not published, so past 25% use the value the Phoenix shows.')
+        + R.note('Where the 25x boost applies inside 5 x log10(Black Eggs) is not confirmed. This applies it to the result.');
+    }
+  },
+  {
+    id: 'calc-platinum', title: 'Platinum Planner', menu: 'Platinum Planner',
+    intro: 'Spends Platinum Eggs the way the community planner does. It is a reported, player-tested split, not a proven optimum. With 200,000 Platinum Eggs from zero it matches the planner exactly.',
+    fields: [G('Budget'), F('plat', 'Platinum Eggs to spend', { full: true }),
+      G('Current levels'), F('pl_rci', 'Rebirth Cap Increase'), F('pl_rb', 'Rebirth Boost'), F('pl_ls', 'Level Skip'), F('pl_ab', 'Abundance'), F('pl_pr', 'Prosperity'), F('pl_rs', 'Resonance'),
+      G('Planner settings'), F('rciMax', 'Rebirth Cap Increase max', { hint: '550 in the menu; update #8 says uncapped.' }),
+      F('w_rci', 'Rebirth Cap share'), F('w_growth', 'Abundance + Prosperity share'), F('w_res', 'Resonance share'), F('w_pr', 'Prosperity part of growth', { hint: 'At most 1%.' }),
+      F('w_rb', 'Rebirth Boost budget share', { hint: 'Of total invested.' }), F('w_ls', 'Level Skip budget share', { hint: '0.041 maxes it near 20K.' })],
+    compute() {
+      const ups = DATA.platinum.upgrades;
+      const cur = { rci: num('pl_rci'), rb: num('pl_rb'), ls: num('pl_ls'), ab: num('pl_ab'), pr: num('pl_pr'), rs: num('pl_rs') };
+      for (const k in cur) cur[k] = Math.max(0, Math.floor(cur[k]));
+      const type = Object.fromEntries(ups.map(u => [u.id, u.cost]));
+      const max = { rci: Math.max(0, Math.floor(num('rciMax'))) || Infinity, rb: 10, ls: 40, ab: Infinity, pr: Infinity, rs: Infinity };
+      const c0 = (id, lv) => platCost(type[id], 0, lv);
+      const avail = Math.max(0, Math.floor(num('plat')));
+      const spentSoFar = Object.keys(cur).reduce((s, id) => s + c0(id, cur[id]), 0);
+      const total = avail + spentSoFar;
+      const want = {};
+      let rb = 0; while (rb < 10 && Math.pow(2, rb + 1) - 1 <= num('w_rb') * total) rb++;
+      let ls = 0; while (ls < 40 && tri(ls + 1) <= num('w_ls') * total) ls++;
+      want.rb = rb; want.ls = ls;
+      const rest = total - c0('rb', rb) - c0('ls', ls);
+      want.rci = Math.min(max.rci, triInv(num('w_rci') * rest));
+      const growth = num('w_growth') * rest + (num('w_rci') * rest - tri(want.rci));
+      want.pr = triInv(num('w_pr') * growth);
+      want.ab = triInv(growth - tri(want.pr));
+      want.rs = triInv(num('w_res') * rest);
+      const tgt = {}; for (const id in cur) tgt[id] = Math.min(max[id], Math.max(cur[id], want[id]));
+      const cost = () => Object.keys(tgt).reduce((s, id) => s + platCost(type[id], cur[id], tgt[id] - cur[id]), 0);
+      let spent = cost(), guard = 0;
+      while (spent > avail && guard++ < 2000000) {
+        let worst = null, wc = -1;
+        for (const id in tgt) if (tgt[id] > cur[id]) { const c = platCost(type[id], tgt[id] - 1, 1); if (c > wc) { wc = c; worst = id; } }
+        if (!worst) break; tgt[worst]--; spent -= wc;
+      }
+      const rows = ups.map(u => [u.name, `${fmtInt(cur[u.id])} → <b>${fmtInt(tgt[u.id])}</b>`, '+' + fmtInt(tgt[u.id] - cur[u.id]), `<span class="c-plat">${fmtInt(platCost(type[u.id], cur[u.id], tgt[u.id] - cur[u.id]))}</span>`, u.max ? fmtInt(u.max) : 'none']);
+      return R.tiles([
+        { l: 'Spent', v: fmtInt(spent), c: 'c-plat', hero: true, s: `of ${fmtInt(avail)} Platinum Eggs` },
+        { l: 'Left over', v: fmtInt(avail - spent), c: 'c-plat' },
+        { l: 'Total invested after', v: fmtInt(spentSoFar + spent), c: 'c-plat' }
+      ]) + R.table(['Upgrade', 'Level', 'Levels', 'Cost', 'Max'], rows, [2, 3, 4])
+        + R.note('Order of the method: unlock Rebirth Boost early; Level Skip grows with your budget and reaches 40 near 20K invested; the rest splits between Rebirth Cap Increase, Abundance and Resonance; Prosperity gets at most 1% of the Abundance + Prosperity budget. Levels you already own are kept.')
+        + R.note('Costs: standard upgrades n levels from L cost n x (2L + n + 1) / 2; Rebirth Boost costs 2^(L+n) - 2^L. Both match the observed examples but are not confirmed game code.');
+    }
+  },
+  {
+    id: 'calc-easter', title: 'Easter Egg Costs', menu: 'Easter Eggs',
+    intro: 'Black Egg cost to level any Easter Egg, how high your Black Eggs can take it, and what it does at that level. Water makes every level 5% cheaper.',
+    fields: [G('Egg'), F('egg', 'Easter Egg', { type: 'select', opts: DATA.easterEggs.map(e => e.name), full: true }), F('eggFrom', 'Current level'), F('eggTo', 'Target level'),
+      G('Your Black Eggs'), F('beAvail', 'Black Eggs to spend'), F('water', 'Water Egg level'),
+      G('Hatching'), F('hatched', 'Easter Eggs hatched', { hint: '0 to 22' })],
+    compute() {
+      const e = EGG[S.egg] || DATA.easterEggs[0];
+      const aL = big('eggFrom'), bL = big('eggTo');
+      const wL = num('water') * Math.log10(0.95);
+      const cL = costL(e.cost, aL, bL); const cW = cL === NEG ? NEG : cL + wL;
+      const budget = big('beAvail');
+      const maxL = maxLevelL(e.cost, aL, budget === NEG ? NEG : budget - wL);
+      const misc = DATA.easterEggs.filter(x => x.cost === 'exp');
+      const a13 = aL === NEG ? 0 : pow10(aL);
+      const even = budget === NEG ? a13 : Math.max(a13, Math.floor(lsum(budget - wL - Math.log10(13), (a13 + 1) * LOG2) / LOG2 - 1 + 1e-9));
+      const h = Math.max(0, Math.min(22, Math.floor(num('hatched'))));
+      const nextHatch = h < 22 ? DATA.hatchCosts[h] : 0;
+      const restHatch = DATA.hatchCosts.slice(h).reduce((s, x) => s + x, 0);
+      const typeName = { constant: '1 per level', linear: 'n + 1 per level', turtle: 'about n^1.5 per level', exp: '2^(n+1) per level' }[e.cost];
+      return R.tiles([
+        { l: `Cost ${lvlStr(aL)} → ${lvlStr(bL)}`, v: fmtL(cW), c: 'c-black', hero: true, s: sciL(cW) + ' Black Eggs' },
+        { l: 'Highest level you can afford', v: lvlStr(maxL), s: 'from your current level' },
+        { l: 'Effect at target', v: `<span style="font-size:18px">${esc(eggEffect(e.f, bL))}</span>` },
+        { l: 'Water discount', v: (100 * (1 - Math.pow(0.95, num('water')))).toFixed(2) + '%', c: 'c-good' }
+      ]) + R.rows([['Cost type', typeName], ['Effect', esc(e.effect)], ['Effect now', esc(eggEffect(e.f, aL))], ['Effect at the affordable level', esc(eggEffect(e.f, maxL))]])
+        + R.sec('Misc 13 evenly') + R.rows([
+          ['All 13 exponential eggs, from your current level, can reach', `<b>${fmtInt(even)}</b>`],
+          ['Ability durations at that level', fmtInt(30 + 2 * even) + ' s'],
+          ['Plateaus', 'Idol ~1,500 · Hourglass ~1,100 · Radioactive ~2,900 · Present ~15,000 · Scientist and King Cobra ~18,700']])
+        + R.sec('Hatching') + R.rows([['Next hatch', h < 22 ? fmtInt(nextHatch) + ' Black Eggs' : 'all hatched'], ['All remaining hatches', fmtInt(restHatch) + ' Black Eggs'], ['Re-roll now costs', h > 0 ? fmtInt(DATA.rerollCosts[Math.min(h, 22) - 1]) : '-']])
+        + R.note('Costs before Water: Good Knight 1; Main 7 n + 1; Turtle about n^1.5; Misc 13 2^(n+1). Very large linear and Turtle levels are close approximations.');
+    }
+  },
+  {
+    id: 'calc-phoenix', title: 'Phoenix Eggs', menu: 'Phoenix Eggs',
+    intro: 'Gold Egg costs for any Phoenix Egg, plus the best Earth and Water split for a budget (the wiki\'s score: Earth multiplier ÷ 0.95^Water).',
+    fields: [G('Your Gold Eggs'), F('ge', 'Gold Eggs to spend', { full: true }),
+      G('One egg'), F('pxEgg', 'Phoenix Egg', { type: 'select', opts: DATA.phoenixEggs.map(e => e.name), full: true }), F('pxFrom', 'Current level'), F('pxTo', 'Target level'),
+      G('Earth and Water'), F('pxE', 'Earth level now'), F('pxW', 'Water level now')],
+    compute() {
+      const p = DATA.phoenixEggs.find(x => x.name === S.pxEgg) || DATA.phoenixEggs[0];
+      const a = Math.floor(num('pxFrom')), b = Math.floor(num('pxTo')), B = Math.floor(num('ge'));
+      const c = p.cost === 'constant' ? Math.max(0, b - a) : Math.max(0, tri(b) - tri(a));
+      const maxLv = p.cost === 'constant' ? a + B : triInv(B + tri(a));
+      const E0 = Math.floor(num('pxE')), W0 = Math.floor(num('pxW'));
+      let best = { s: -Infinity, E: E0, W: W0 };
+      const Emax = triInv(B + tri(E0)); const step = Math.max(1, Math.floor((Emax - E0) / 200000));
+      for (let E = E0; E <= Emax; E += step) {
+        const rem = B - (tri(E) - tri(E0)); if (rem < 0) break;
+        const W = Math.max(W0, triInv(rem + tri(W0)));
+        const s = Math.log10(10 * E * E + 1) - W * Math.log10(0.95);
+        if (s > best.s) best = { s, E, W };
+      }
+      const left = B - (tri(best.E) - tri(E0)) - (tri(best.W) - tri(W0));
+      return R.tiles([
+        { l: `${p.name} ${fmtInt(a)} → ${fmtInt(b)}`, v: fmtInt(c), c: 'c-gold', hero: true, s: 'Gold Eggs' },
+        { l: `Highest ${p.name} level you can afford`, v: fmtInt(maxLv) },
+        { l: 'Best Earth / Water', v: `${fmtInt(best.E)} / ${fmtInt(best.W)}`, c: 'c-gold', s: `${fmtInt(left)} Gold Eggs left` },
+        { l: 'Black Egg multiplier from Earth', v: 'x' + fmtL(Math.log10(10 * best.E * best.E + 1)), c: 'c-black' }
+      ]) + R.rows([['Effect', esc(p.effect)], ['Easter Eggs cheaper by (best Water)', (100 * (1 - Math.pow(0.95, best.W))).toFixed(2) + '%'], ['Cost type', p.cost === 'constant' ? '1 Gold Egg per level' : 'n + 1 per level']])
+        + R.note('Earth matters most in your first few Rebirths. Once Rebirth Power drives Black Eggs, the wiki suggests Earth around 32 and well under 100. Sound, Wind, Acid, Magnetism and Electricity only work once their Easter Egg (Idol, Hourglass, King Cobra, Radioactive, Scientist) is at its plateau.');
+    }
+  },
+  {
+    id: 'calc-level', title: 'Level Stats', menu: 'Level Stats',
+    intro: 'What a farm level throws at you, and how deep your Easter and Phoenix Eggs carry you before each counter runs out.',
+    fields: [G('Level'), F('lvl', 'Farm level'), F('hasty', 'Hasty Hen active', { type: 'bool' }),
+      G('Chickens per level'), F('idol', 'Idol'), F('sound', 'Sound'), F('resonance', 'Resonance (Platinum)'),
+      G('Boss health'), F('cobra', 'King Cobra'), F('acid', 'Acid'),
+      G('Boss timer'), F('hourglass', 'Hourglass'), F('wind', 'Wind'),
+      G('Mutated and Eggception'), F('radio', 'Radioactive'), F('mag', 'Magnetism'), F('sci', 'Scientist'), F('elec', 'Electricity')],
+    compute() {
+      const L = Math.max(1, Math.floor(num('lvl')));
+      const hp = chickenHPL(L), bm = bossMult(L, num('cobra'), num('acid')), bt = bossTimer(L, num('hourglass'), num('wind'));
+      const bossHP = hp + Math.log10(bm);
+      const cpl = chickensPer(L, num('idol'), num('sound'), num('resonance'), !!S.hasty);
+      const mc = mutChance(Math.ceil(L / 5) * 5, num('radio'), num('mag'));
+      const ec = eggception(L, num('sci'), num('elec'));
+      const ir = idolRed(num('idol'), num('sound'), num('resonance'));
+      const cplUntil = 500 * (Math.floor((ir - 8) / 0.1) + 1);
+      const hb = hgBonus(num('hourglass'), num('wind'));
+      const timerFloor = 500 * Math.ceil((28 + hb) / 2);
+      const rb = radioBonus(num('radio'), num('mag'));
+      const mut100 = rb >= 75 ? 500 * (Math.floor((rb - 75) / 2) + 1) : 0;
+      const cr = cobraRed(num('cobra'), num('acid'));
+      const floorUntil = cr > 5 ? 500 * (Math.floor((cr - 5) / 0.4) + 1) : 0;
+      const sm = sciMult(num('sci'), num('elec'));
+      const ec100 = sm >= 100 ? 500 * (Math.floor(Math.log(100 / sm) / Math.log(0.994)) + 1) : 0;
+      return R.tiles([
+        { l: 'Chicken', v: `<span style="font-size:20px">${esc(chickenName(L))}</span>`, s: 'Name from the wiki table (cycle of 855)' },
+        { l: 'Chicken health', v: fmtL(hp), title: sciL(hp) },
+        { l: 'Boss health', v: fmtL(bossHP), s: `${bm.toFixed(2)}x a chicken` },
+        { l: 'Boss timer', v: bt.toFixed(1) + ' s', c: bt <= 2 ? 'c-bad' : '' },
+        { l: 'DPS to beat the boss', v: fmtL(bossHP - Math.log10(bt)), hero: true },
+        { l: 'Chickens per level', v: cpl.toFixed(2), c: cpl <= 2 ? 'c-good' : '' },
+        { l: 'Mutated chance', v: mc.toFixed(1) + '%', c: mc >= 100 ? 'c-good' : '' },
+        { l: 'Eggception chance', v: ec.toFixed(2) + '%', c: ec >= 100 ? 'c-good' : '' }
+      ]) + R.sec('How deep your eggs carry you') + R.rows([
+        ['2 chickens per level until', cplUntil > 0 ? 'level ' + fmtInt(cplUntil) : 'already above 2', cplUntil > L ? 'c-good' : 'c-bad'],
+        ['Boss timer hits the 2 s floor at', 'level ' + fmtInt(timerFloor), timerFloor > L ? 'c-good' : 'c-bad'],
+        ['100% Mutated chance until', mut100 ? 'level ' + fmtInt(mut100) : 'never 100%', mut100 > L ? 'c-good' : 'c-bad'],
+        ['Boss health at the 5x floor until', floorUntil ? 'level ' + fmtInt(floorUntil) : 'not at the floor', floorUntil > L ? 'c-good' : ''],
+        ['100% Eggception chance until', ec100 ? 'level ' + fmtInt(ec100) : 'never 100%', ec100 > L ? 'c-good' : '']])
+        + R.note('Every 500 levels: +0.1 chickens, +0.4x boss health, -2 s boss timer, -2% Mutated chance, x0.994 Eggception chance. Resonance is applied as +2% to Sound\'s effect per level, which is an assumption from its in-game text.');
+    }
+  },
+  {
+    id: 'calc-hero', title: 'Hero Levels', menu: 'Hero Levels',
+    intro: 'How much damage levels add to a Hero: x4 every 25 levels after 175 (x5 from 525 to 725) and x10 every 1,000. Hire Max now goes up to level 10K.',
+    fields: [G('Hero'), F('heroFrom', 'From level'), F('heroTo', 'To level'), F('heroGarbage', 'Garbage Egg level')],
+    compute() {
+      const lm = n => { n = Math.floor(n); const c = Math.max(0, Math.floor(n / 25) - 7); const c5 = n >= 525 ? Math.max(0, Math.min(Math.floor(n / 25), 29) - 20) : 0; return Math.floor(n / 1000) + (c - c5) * Math.log10(4) + c5 * Math.log10(5); };
+      const a = num('heroFrom'), b = num('heroTo');
+      const g = 99.99999999 * (1 - Math.exp(-0.01 * num('heroGarbage')));
+      const marks = [200, 500, 725, 1000, 2000, 5000, 10000];
+      return R.tiles([
+        { l: `Damage gain ${fmtInt(a)} → ${fmtInt(b)}`, v: 'x' + fmtL(lm(b) - lm(a)), hero: true },
+        { l: `Level multiplier at ${fmtInt(b)}`, v: 'x' + fmtL(lm(b)) },
+        { l: 'Black Eggs from these levels', v: fmtInt(Math.floor(Math.max(0, b - a) / 2000)), c: 'c-black', s: 'before the 500x and other boosts' },
+        { l: 'Hero costs cut by Garbage', v: g.toFixed(4) + '%', c: 'c-good' }
+      ]) + R.table(['Level', 'Multiplier from levels'], marks.map(m => [fmtInt(m), 'x' + fmtL(lm(m))]), [1])
+        + R.note('Master Pai Mei does not get the x4 steps. Multipliers are from the original game; check the 10K-level behaviour in game.');
+    }
+  },
+  {
+    id: 'calc-diamonds', title: 'Diamonds, Boxes and Abilities', menu: 'Diamonds & Abilities',
+    intro: 'Diamond income with the 10x boost, Auto-Egg prices, box odds and ability uptime.',
+    fields: [G('Diamonds'), F('diaHave', 'Diamonds now'), F('diaWant', 'Saving for'), F('vip', 'I have VIP', { type: 'bool', full: true }),
+      G('Auto-Eggs'), F('autoOwned', 'Auto-Eggs owned'), F('autoBuy', 'Buying'),
+      G('Boxes'), F('box', 'Box', { type: 'select', opts: DATA.boxes.filter(b => b.odds).map(b => b.name) }), F('boxN', 'How many'),
+      G('Ability'), F('ability', 'Ability', { type: 'select', opts: DATA.abilities.map(a => a.name) }), F('weapon', 'Weapon on it', { type: 'select', opts: ['None'].concat(DATA.rarities.map(r => r.name)) }), F('durLvl', 'Its duration egg level', { full: true })],
+    compute() {
+      const perRain = 150 * M.diamonds, perHour = perRain * 60 / DATA.timers.diamondRainMinutes;
+      const daily = perHour * 24 + (S.vip ? 2500 : 0);
+      const need = Math.max(0, num('diaWant') - num('diaHave'));
+      const hrs = need / (perHour + (S.vip ? 2500 / 24 : 0));
+      const own = Math.floor(num('autoOwned')), k = Math.max(0, Math.floor(num('autoBuy')));
+      const autoCost = k * 4000 + 2000 * (own * k + k * (k - 1) / 2);
+      const box = DATA.boxes.find(b => b.name === S.box) || DATA.boxes[0]; const n = num('boxN');
+      const ab = DATA.abilities.find(a => a.name === S.ability) || DATA.abilities[0];
+      const wr = DATA.rarities.find(r => r.name === S.weapon); const red = wr ? wr.weaponCd : 0;
+      const cd = ab.cd * (1 - red / 100); const dur = ab.dur ? ab.dur + 2 * num('durLvl') : null;
+      const t = s => s >= 3600 ? (s / 3600).toFixed(s % 3600 ? 2 : 0) + ' h' : s >= 60 ? (s / 60).toFixed(s % 60 ? 1 : 0) + ' min' : s.toFixed(0) + ' s';
+      return R.tiles([
+        { l: 'Diamond Rain per hour', v: fmtInt(perHour), c: 'c-dia', hero: true, s: `${fmtInt(perRain)} per rain, if the 10x applies` },
+        { l: 'Per day', v: fmtInt(daily), c: 'c-dia', s: S.vip ? 'includes VIP 2,500' : 'rain only' },
+        { l: 'Time to your goal', v: need ? (hrs >= 1 ? hrs.toFixed(1) + ' h' : Math.ceil(hrs * 60) + ' min') : 'done', s: num('diaWant') > 1000000 ? 'Over the 1,000,000 cap' : '' },
+        { l: `Next ${fmtInt(k)} Auto-Eggs`, v: fmtInt(autoCost), c: 'c-dia', s: `next one ${fmtInt(4000 + 2000 * own)}` }
+      ]) + R.sec(`${fmtN(n, 0)} x ${esc(box.name)} (${fmtInt(box.price * n)} diamonds)`)
+        + R.table(DATA.rarities.map(r => `<span class="r-${r.name}">${r.name}</span>`), [box.odds.map(o => fmtN(n * o / 100, 2))], [0, 1, 2, 3, 4, 5])
+        + R.sec(esc(ab.name)) + R.rows([['Effect', esc(ab.effect)], ['Cooldown', t(cd) + (red ? ` (base ${t(ab.cd)}, -${red}%)` : '')], ['Duration', dur ? t(dur) : 'instant or whole run'], ['Uptime', dur ? Math.min(100, 100 * dur / cd).toFixed(1) + '%' : '-', dur && dur >= cd ? 'c-good' : '']])
+        + R.note('Diamond Rain was 150 per rain in the original game. Box and Auto-Egg prices are the original game\'s. Diamonds are capped at 1,000,000.');
+    }
+  },
+  {
+    id: 'calc-numbers', title: 'Number Converter', menu: 'Number Converter',
+    intro: 'The game writes big numbers with letter suffixes, then switches to scientific notation. Paste either form; the Easter Egg box accepts both.',
+    fields: [F('num', 'Number', { full: true, hint: 'Examples: 3.5Q, 1.2e45, 2.5e1,000' })],
+    compute() {
+      const l = big('num');
+      return R.tiles([{ l: 'Game format', v: fmtL(l), hero: true }, { l: 'Scientific', v: sciL(l) }, { l: 'Digits', v: l === NEG ? '1' : fmtInt(Math.floor(l) + 1) }, { l: 'log10', v: l === NEG ? '-' : l.toFixed(4) }])
+        + R.table(['Suffix', 'Value', 'Name'], SUF.slice(1).map((s, i) => [`<b>${s}</b>`, '1e' + 3 * (i + 1), ['thousand', 'million', 'billion', 'trillion', 'quadrillion', 'quintillion', 'sextillion', 'septillion', 'octillion', 'nonillion', 'decillion', 'undecillion', 'duodecillion'][i]]), [1])
+        + R.note('Suffixes are case-sensitive: q is quadrillion and Q quintillion, s sextillion and S septillion, d decillion and D duodecillion.');
+    }
+  }
+];
+
+/* ============ reference tables ============ */
+const srcTag = s => { s = String(s || ''); const d = /discord/.test(s), w = /wiki/.test(s); return d && w ? '<span class="tag mixed">Discord + Wiki</span>' : d ? '<span class="tag discord">Discord</span>' : '<span class="tag wiki">Wiki</span>'; };
+const REFS = [
+  { id: 'ref-caps', title: 'Modded Caps and Timers', menu: 'Caps & Timers', render() {
+    return R.table(['What', 'Value', 'Notes', 'Source'], DATA.caps.map(c => [esc(c.what), `<b class="c-gold">${esc(c.value)}</b>`, esc(c.note), srcTag(c.src)]))
+      + R.rows([['Idle bonus starts after', DATA.timers.idleSeconds + ' s'], ['Combo lasts', DATA.timers.comboMinutes + ' min'], ['Diamond Rain', 'every ~' + DATA.timers.diamondRainMinutes + ' min'], ['Egg Rocket', 'every ~' + DATA.timers.rocketMinutes + ' min']]);
+  } },
+  { id: 'ref-farmers', title: 'Heroes', menu: 'Heroes', search: true, render(q) {
+    const rows = DATA.farmers.filter(f => !q || (f[1] + ' ' + f[4] + ' ' + f[5]).toLowerCase().includes(q)).map(f => [f[0], `<b>${esc(f[1])}</b>`, `<span class="c-white">${esc(f[2])}</span>`, esc(f[3]), f[4] ? `<span class="c-gold">${esc(f[4])}</span>` : '', esc(f[5])]);
+    return R.note(esc(DATA.farmersNote)) + R.table(['#', 'Hero', 'Hire cost', 'DPS at Lv 1', 'Ability', 'Notable upgrades'], rows, [0, 2, 3]);
+  } },
+  { id: 'ref-eggs', title: 'Easter Eggs', menu: 'Easter Eggs', render() {
+    const ct = { constant: '1', linear: 'n + 1', turtle: '≈ n^1.5', exp: '2^(n+1)' };
+    return R.table(['Easter Egg', 'Effect', 'Next level costs'], DATA.easterEggs.map(e => [`<b>${e.name}</b>`, esc(e.effect), `<span class="c-black">${ct[e.cost]}</span>`]), [2])
+      + R.sec('Hatch and re-roll costs') + R.table(['Hatch #', 'Hatch cost', 'Re-roll cost'], DATA.hatchCosts.map((c, i) => [i + 1, fmtInt(c), fmtInt(DATA.rerollCosts[i])]), [0, 1, 2]);
+  } },
+  { id: 'ref-phoenix', title: 'Phoenix Eggs', menu: 'Phoenix Eggs', render() {
+    return R.table(['Phoenix Egg', 'Effect', 'Next level costs'], DATA.phoenixEggs.map(e => [`<b>${e.name}</b>`, esc(e.effect), `<span class="c-gold">${e.cost === 'constant' ? '1' : 'n + 1'}</span>`]), [2]);
+  } },
+  { id: 'ref-platinum', title: 'Platinum Upgrades', menu: 'Platinum Upgrades', render() {
+    const p = DATA.platinum;
+    return R.rows([['Unlock', esc(p.unlock)]]) + R.table(['Upgrade', 'Max', 'Effect', 'Cost'], p.upgrades.map(u => [`<b>${u.name}</b>`, u.max ? fmtInt(u.max) : 'none', esc(u.effect) + (u.note ? `<br><span class="c-bad" style="font-size:13px">${esc(u.note)}</span>` : ''), u.cost === 'double' ? '2^L' : 'L + 1'])) + R.note(esc(p.costNote));
+  } },
+  { id: 'ref-abilities', title: 'Abilities', menu: 'Abilities', render() {
+    const t = s => s == null ? '-' : s >= 3600 ? s / 3600 + ' h' : s >= 60 ? s / 60 + ' min' : s + ' s';
+    return R.table(['Key', 'Ability', 'From', 'Effect', 'Duration', 'Cooldown', 'Duration egg'], DATA.abilities.map(a => [a.key, `<b>${a.name}</b>`, esc(a.from), esc(a.effect), t(a.dur), t(a.cd), esc(a.egg)]), [0, 4, 5]);
+  } },
+  { id: 'ref-items', title: 'Items and Boxes', menu: 'Items & Boxes', render() {
+    return R.table(['Rarity', 'Weapon cooldown cut', 'Wings', 'Trail crit'], DATA.rarities.map(r => [`<b class="r-${r.name}">${r.name}</b>`, r.weaponCd + '% (3 abilities)', '+' + r.wingsAps + ' attacks/s', r.trailCrit == null ? 'none' : '+' + r.trailCrit + '%']), [1, 2, 3])
+      + R.sec('Boxes') + R.table(['Box', 'Price'].concat(DATA.rarities.map(r => `<span class="r-${r.name}">${r.name}</span>`)), DATA.boxes.map(b => [`<b>${b.name}</b>`, `<span class="c-dia">${fmtInt(b.price)}</span>`].concat(b.odds ? b.odds.map(o => o ? o + '%' : '-') : ['trophies only', '', '', '', '', ''])), [1, 2, 3, 4, 5, 6, 7])
+      + R.note('Trophies: +250% damage to their Hero, +10% per Wonderland level. Reforge for 200 diamonds (random) or 8,000 (pick one). Box prices are the original game\'s.');
+  } },
+  { id: 'ref-dealer', title: 'Dealer and Passes', menu: 'Dealer & Passes', render() {
+    return R.table(['Dealer', 'Diamonds', 'Effect', 'Source'], DATA.dealer.map(d => [`<b>${d.name}</b>`, `<span class="c-dia">${esc(d.price)}</span>`, esc(d.effect), srcTag(d.src)]))
+      + R.sec('Passes and products') + R.table(['Pass', 'Effect', 'Source'], DATA.passes.map(d => [`<b>${d.name}</b>`, esc(d.effect), srcTag(d.src)]));
+  } },
+  { id: 'ref-chickens', title: 'Chickens', menu: 'Chickens', search: true, render(q) {
+    const rows = CHICKENS.map((c, i) => { const end = i + 1 < CHICKENS.length ? CHICKENS[i + 1][0] - 1 : 855; return [c, end]; })
+      .filter(([c]) => !q || c[1].toLowerCase().includes(q) || String(c[0]).startsWith(q))
+      .map(([c, end]) => [`${fmtInt(c[0])} to ${fmtInt(end)}`, `<b>${esc(c[1])}</b>`, c[2] ? `<span class="c-gold">${esc(c[2])}</span>` : '-']);
+    return R.note('Chicken types cycle every 855 levels. Minimum boss DPS is from the original game without boosts, so it only matters as a rough early guide. Use Level Stats for exact health at any level.') + R.table(['Levels', 'Chicken', 'Min. DPS for the boss'], rows, [2]);
+  } }
+];
+
+/* ============ guide notes ============ */
+const GUIDE = Object.keys(NOTES).filter(p => p.startsWith('guide/')).sort().map(p => {
+  const md = NOTES[p]; const title = (md.match(/^#\s+(.+)$/m) || [, p])[1];
+  return { path: p, id: 'guide-' + p.replace(/^guide\/\d+-/, '').replace(/\.md$/, ''), title };
+});
+const REFLINK = { 'reference/farmers.md': 'ref-farmers', 'reference/easter-eggs.md': 'ref-eggs', 'reference/phoenix-eggs.md': 'ref-phoenix', 'reference/chickens.md': 'ref-chickens', 'reference/update-log.md': 'updates', 'reference/platinum.md': 'ref-platinum', 'reference/abilities.md': 'ref-abilities', 'reference/items-and-shop.md': 'ref-items' };
+function resolveLink(fromPath, href) {
+  if (/^https?:/.test(href)) return null;
+  const m = href.match(/index\.html#([a-z0-9-]+)/); if (m) return { route: m[1] };
+  const [file, hash] = href.split('#');
+  if (!file) return { hash };
+  const parts = fromPath.split('/'); parts.pop();
+  for (const seg of file.split('/')) { if (seg === '..') parts.pop(); else if (seg !== '.') parts.push(seg); }
+  const p = parts.join('/');
+  const g = GUIDE.find(n => n.path === p); if (g) return { route: g.id, hash };
+  if (REFLINK[p]) return { route: REFLINK[p] };
+  return null;
+}
+const slug = s => s.toLowerCase().replace(/<[^>]+>/g, '').replace(/[^a-z0-9 -]/g, '').trim().replace(/\s+/g, '-');
+function renderMarkdown(md) {
+  md = md.replace(/^---[\s\S]*?---\n/, '');
+  if (window.marked && marked.parse) return marked.parse(md, { gfm: true });
+  return '<pre style="white-space:pre-wrap">' + esc(md) + '</pre>';
+}
+
+/* ============ router & views ============ */
+const TABS = [
+  { id: 'guide', label: 'Guide', first: () => GUIDE[0].id },
+  { id: 'calc', label: 'Calculators', first: () => CALCS[0].id },
+  { id: 'ref', label: 'Reference', first: () => REFS[0].id },
+  { id: 'updates', label: 'Update Log', first: () => 'updates' }
+];
+const tabOf = r => r.startsWith('guide-') ? 'guide' : r.startsWith('calc-') ? 'calc' : r.startsWith('ref-') ? 'ref' : r === 'updates' ? 'updates' : 'guide';
+let route = '', pendingHash = null;
+function go(r, hash) { pendingHash = hash || null; if (location.hash === '#' + r) render(); else location.hash = r; }
+function currentRoute() {
+  const h = location.hash.replace(/^#/, '');
+  const all = GUIDE.map(g => g.id).concat(CALCS.map(c => c.id), REFS.map(x => x.id), ['updates']);
+  return all.includes(h) ? h : GUIDE[0].id;
+}
+const $ = s => document.querySelector(s);
+function renderTabs() {
+  const t = tabOf(route);
+  $('#tabs').innerHTML = TABS.map(x => `<button class="tab" role="tab" aria-selected="${x.id === t}" data-tab="${x.id}">${x.label}</button>`).join('');
+}
+function renderMenu() {
+  const t = tabOf(route); let html = '';
+  if (t === 'guide') html = '<h3>Guide</h3><div class="list">' + GUIDE.map(g => mi(g.id, g.title)).join('') + '</div>';
+  if (t === 'calc') html = '<h3>Calculators</h3><div class="list">' + CALCS.map(c => mi(c.id, c.menu)).join('') + '</div>';
+  if (t === 'ref') html = '<h3>Reference</h3><div class="list">' + REFS.map(c => mi(c.id, c.menu)).join('') + '</div>';
+  if (t === 'updates') html = '<h3>Update Log</h3><div class="list">' + mi('updates', 'All updates', DATA.updates.length) + '</div>';
+  $('#menu').innerHTML = html;
+}
+function mi(id, label, k) { return `<button class="mi" type="button" data-go="${id}"${id === route ? ' aria-current="page"' : ''}>${esc(label)}${k ? `<span class="k">${k}</span>` : ''}</button>`; }
+function plank(title, sub) { return `<div class="plank"><h2 class="gild">${esc(title)}</h2>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`; }
+
+function renderGuide(g) {
+  const v = $('#view');
+  v.innerHTML = plank(g.title) + `<div class="body"><article class="prose" id="prose">${renderMarkdown(NOTES[g.path])}</article></div>`;
+  const pr = $('#prose');
+  pr.querySelectorAll('table').forEach(t => { const w = document.createElement('div'); w.className = 'tablewrap'; t.parentNode.insertBefore(w, t); w.appendChild(t); });
+  pr.querySelectorAll('h2,h3').forEach(h => { h.id = slug(h.textContent); });
+  pr.querySelectorAll('a[href]').forEach(a => {
+    const href = a.getAttribute('href'); const r = resolveLink(g.path, href);
+    if (/^https?:/.test(href)) { a.target = '_blank'; a.rel = 'noopener'; return; }
+    if (r) { a.dataset.route = r.route || ''; a.dataset.hash = r.hash || ''; a.href = r.route ? '#' + r.route : '#'; }
+  });
+}
+let debounce = 0;
+function renderCalc(c) {
+  const v = $('#view');
+  const field = f => {
+    if (f.group) return `<div class="group">${f.group}</div>`;
+    const id = 'f-' + f.k; const full = f.full ? ' full' : '';
+    if (f.type === 'bool') return `<label class="check${full}" for="${id}"><input type="checkbox" id="${id}" data-k="${f.k}"${S[f.k] ? ' checked' : ''}>${f.label}</label>`;
+    if (f.type === 'select') return `<div class="field${full}"><label for="${id}">${f.label}</label><select id="${id}" data-k="${f.k}">${f.opts.map(o => `<option${o === S[f.k] ? ' selected' : ''}>${esc(o)}</option>`).join('')}</select>${f.hint ? `<span class="hint">${f.hint}</span>` : ''}</div>`;
+    return `<div class="field${full}"><label for="${id}">${f.label}</label><input type="text" inputmode="decimal" autocomplete="off" spellcheck="false" id="${id}" data-k="${f.k}" value="${esc(S[f.k])}">${f.hint ? `<span class="hint">${f.hint}</span>` : ''}</div>`;
+  };
+  v.innerHTML = plank(c.title) + `<div class="body"><p class="intro">${c.intro}</p><div class="calc"><form class="form" id="form" autocomplete="off">${c.fields.map(field).join('')}<div class="full btns"><button type="button" class="btn sell" data-act="reset">Reset to examples</button></div></form><div class="results" id="results"></div></div></div>`;
+  const run = () => { try { $('#results').innerHTML = c.compute(); } catch (e) { $('#results').innerHTML = R.note('Could not calculate: ' + esc(e.message)); } };
+  run();
+  $('#form').addEventListener('submit', e => e.preventDefault());
+  $('#form').addEventListener('input', e => {
+    const el = e.target; const k = el.dataset.k; if (!k) return;
+    S[k] = el.type === 'checkbox' ? el.checked : el.value;
+    if (el.type === 'text') el.classList.toggle('bad', el.value.trim() !== '' && Number.isNaN(parseL(el.value)));
+    save(); clearTimeout(debounce); debounce = setTimeout(run, 120);
+  });
+  c._run = run;
+}
+function renderRef(r) {
+  const v = $('#view');
+  v.innerHTML = plank(r.title) + `<div class="body">${r.search ? `<div class="field search"><label for="refq">Search</label><input type="text" id="refq" autocomplete="off" placeholder="Name or level"></div>` : ''}<div id="refbody">${r.render('')}</div></div>`;
+  if (r.search) $('#refq').addEventListener('input', e => { $('#refbody').innerHTML = r.render(e.target.value.trim().toLowerCase()); });
+}
+function renderUpdates() {
+  $('#view').innerHTML = plank('Update Log', 'From the EFSR [REBORN] Discord, oldest first') + '<div class="body"><div class="log">' + DATA.updates.map(u => `<div class="logcard"><h3>${esc(u.id)}</h3><ul>${u.items.map(i => `<li>${esc(i)}</li>`).join('')}</ul></div>`).join('') + '</div></div>';
+}
+function render() {
+  route = currentRoute();
+  renderTabs(); renderMenu();
+  const g = GUIDE.find(x => x.id === route), c = CALCS.find(x => x.id === route), r = REFS.find(x => x.id === route);
+  if (g) renderGuide(g); else if (c) renderCalc(c); else if (r) renderRef(r); else renderUpdates();
+  const ph = pendingHash; pendingHash = null;
+  const target = ph && document.getElementById(ph);
+  if (target) target.scrollIntoView({ block: 'start' });
+  else if (document.activeElement && document.activeElement.closest && document.activeElement.closest('#menu')) {} else window.scrollTo({ top: 0 });
+  document.title = 'EFSR Modded Field Guide';
+}
+document.addEventListener('click', e => {
+  const t = e.target.closest('[data-tab],[data-go],[data-route],[data-act]'); if (!t) return;
+  if (t.dataset.tab) { go(TABS.find(x => x.id === t.dataset.tab).first()); return; }
+  if (t.dataset.go) { go(t.dataset.go); return; }
+  if (t.dataset.route !== undefined && t.tagName === 'A') {
+    e.preventDefault();
+    if (t.dataset.route) go(t.dataset.route, t.dataset.hash);
+    else if (t.dataset.hash) { const el = document.getElementById(t.dataset.hash); if (el) el.scrollIntoView({ block: 'start' }); }
+    return;
+  }
+  if (t.dataset.act === 'reset') {
+    const c = CALCS.find(x => x.id === route); if (!c) return;
+    c.fields.forEach(f => { if (f.k) S[f.k] = DEFAULTS[f.k]; }); save(); renderCalc(c); return;
+  }
+  if (t.dataset.act === 'send-run') {
+    const c = CALCS.find(x => x.id === 'calc-run'); if (c._last !== undefined) { S.runBE = sciL(c._last); save(); }
+    go('calc-gold');
+  }
+});
+window.addEventListener('hashchange', render);
+render();
+</script>
